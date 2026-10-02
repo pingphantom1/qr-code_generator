@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="error-page" aria-labelledby="error-heading">
+  <div class="container error-page__inner">
+
+    <!-- Illustrated QR code with an X or question mark overlaid -->
+    <div class="error-page__illustration" aria-hidden="true">
+      <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" class="error-page__qr">
+        <!-- Finder top-left -->
+        <rect x="4"  y="4"  width="28" height="28" rx="3" fill="currentColor" opacity="0.15"/>
+        <rect x="9"  y="9"  width="18" height="18" rx="2" fill="currentColor" opacity="0.15"/>
+        <rect x="14" y="14" width="8"  height="8"  rx="1" fill="currentColor" opacity="0.25"/>
+        <!-- Finder top-right -->
+        <rect x="64" y="4"  width="28" height="28" rx="3" fill="currentColor" opacity="0.15"/>
+        <rect x="69" y="9"  width="18" height="18" rx="2" fill="currentColor" opacity="0.15"/>
+        <rect x="74" y="14" width="8"  height="8"  rx="1" fill="currentColor" opacity="0.25"/>
+        <!-- Finder bottom-left -->
+        <rect x="4"  y="64" width="28" height="28" rx="3" fill="currentColor" opacity="0.15"/>
+        <rect x="9"  y="69" width="18" height="18" rx="2" fill="currentColor" opacity="0.15"/>
+        <rect x="14" y="74" width="8"  height="8"  rx="1" fill="currentColor" opacity="0.25"/>
+        <!-- Scattered data modules (faded) -->
+        <rect x="40" y="4"  width="5" height="5" rx="0.8" fill="currentColor" opacity="0.12"/>
+        <rect x="48" y="4"  width="5" height="5" rx="0.8" fill="currentColor" opacity="0.12"/>
+        <rect x="40" y="12" width="5" height="5" rx="0.8" fill="currentColor" opacity="0.12"/>
+        <rect x="56" y="12" width="5" height="5" rx="0.8" fill="currentColor" opacity="0.12"/>
+        <rect x="4"  y="40" width="5" height="5" rx="0.8" fill="currentColor" opacity="0.12"/>
+        <rect x="12" y="40" width="5" height="5" rx="0.8" fill="currentColor" opacity="0.12"/>
+        <rect x="4"  y="48" width="5" height="5" rx="0.8" fill="currentColor" opacity="0.12"/>
+        <!-- Error icon overlay (centre) -->
+        <circle cx="48" cy="56" r="22" fill="var(--color-bg-card)" stroke="var(--color-border)" stroke-width="1.5"/>
+        {% block error_icon %}{% endblock %}
+      </svg>
+    </div>
+
+    <p class="error-page__code">{% block error_code %}{% endblock %}</p>
+    <h1 class="error-page__title" id="error-heading">{% block error_title %}{% endblock %}</h1>
+    <p class="error-page__message">{% block error_message %}{% endblock %}</p>
+
+    <div class="error-page__actions">
+      <a href="{{ url_for('landing') }}" class="btn btn--primary btn--lg">Go home</a>
+      <button onclick="history.back()" class="btn btn--outline btn--lg" type="button">Go back</button>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

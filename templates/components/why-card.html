@@ -1,0 +1,15 @@
+{#
+  why-card.html — Reusable "Why PhantomQR" feature card
+  Usage:
+    {% set why = { "icon_id": "icon-free", "title": "Always Free", "description": "..." } %}
+    {% include "components/why-card.html" %}
+#}
+<div class="why-card">
+  <div class="why-card__icon" aria-hidden="true">
+    <svg class="why-card__svg">
+      <use href="#{{ why.icon_id }}" />
+    </svg>
+  </div>
+  <h3 class="why-card__title">{{ why.title }}</h3>
+  <p class="why-card__desc">{{ why.description }}</p>
+</div>

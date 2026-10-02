@@ -1,0 +1,49 @@
+<footer class="footer" role="contentinfo">
+  <div class="container footer__inner">
+
+    <!-- Brand column -->
+    <div class="footer__brand">
+      <a href="{{ url_for('landing') }}" aria-label="PhantomQR home">
+        <img
+          src="{{ url_for('static', filename='images/logo.svg') }}"
+          alt="PhantomQR"
+          class="footer__logo"
+          width="140"
+          height="32"
+        />
+      </a>
+      <p class="footer__tagline">
+        Free QR code generator. No signup, no watermark, no expiry.
+      </p>
+    </div>
+
+    <!-- Nav columns -->
+    <nav class="footer__nav" aria-label="Footer navigation">
+      <div class="footer__col">
+        <h3 class="footer__col-heading">Product</h3>
+        <ul class="footer__col-list" role="list">
+          <li><a href="/#generator" class="footer__link">Create QR Code</a></li>
+          <li><a href="#how-it-works" class="footer__link">How it works</a></li>
+          <li><a href="#use-cases" class="footer__link">Use cases</a></li>
+          <li><a href="#why-phantomqr" class="footer__link">Why PhantomQR</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h3 class="footer__col-heading">Support</h3>
+        <ul class="footer__col-list" role="list">
+          <li><a href="#faq" class="footer__link">FAQ</a></li>
+          <li><a href="#contact" class="footer__link">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+
+  </div>
+
+  <div class="footer__bottom">
+    <div class="container footer__bottom-inner">
+      <p class="footer__copy">&copy; <span id="footer-year"></span> PhantomQR. All rights reserved.</p>
+      <p class="footer__note">Free to use. Always.</p>
+    </div>
+  </div>
+</footer>

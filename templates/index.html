@@ -1,0 +1,725 @@
+{% extends "base.html" %}
+
+{% block title %}PhantomQR — Free QR Code Generator. No Signup. No Watermark.{% endblock %}
+{% block meta_description %}PhantomQR generates free, permanent QR codes for URLs, WiFi, vCards, email, and more. No account required. No watermarks. Download instantly as PNG or SVG.{% endblock %}
+
+{% block content %}
+
+<!-- ============================================================
+     SVG ICON SPRITE
+     All inline icons defined once here, referenced via <use>
+     ============================================================ -->
+<svg class="svg-sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Free / No cost -->
+    <symbol id="icon-free" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+      <path d="M12 6v6l4 2"/>
+    </symbol>
+
+    <!-- No signup / Person -->
+    <symbol id="icon-no-signup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </symbol>
+
+    <!-- No watermark / Shield check -->
+    <symbol id="icon-clean" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      <polyline points="9 12 11 14 15 10"/>
+    </symbol>
+
+    <!-- Never expires / Infinity-like clock -->
+    <symbol id="icon-permanent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 6 12 12 16 14"/>
+    </symbol>
+
+    <!-- Fast / Lightning -->
+    <symbol id="icon-fast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </symbol>
+
+    <!-- Download / Arrow down -->
+    <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="7 10 12 15 17 10"/>
+      <line x1="12" y1="15" x2="12" y2="3"/>
+    </symbol>
+
+    <!-- Restaurant / Utensils -->
+    <symbol id="icon-restaurant" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="2" x2="3" y2="22"/>
+      <path d="M7 2v6a4 4 0 0 1-4 4"/>
+      <path d="M21 2v4a6 6 0 0 1-6 6v10"/>
+    </symbol>
+
+    <!-- Events / Calendar -->
+    <symbol id="icon-event" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/>
+      <line x1="8" y1="2" x2="8" y2="6"/>
+      <line x1="3" y1="10" x2="21" y2="10"/>
+    </symbol>
+
+    <!-- Business card / Credit card -->
+    <symbol id="icon-business-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="5" width="20" height="14" rx="2"/>
+      <line x1="2" y1="10" x2="22" y2="10"/>
+    </symbol>
+
+    <!-- Marketing / Megaphone -->
+    <symbol id="icon-marketing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 11l19-9-9 19-2-8-8-2z"/>
+    </symbol>
+
+    <!-- WiFi -->
+    <symbol id="icon-wifi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+      <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+      <path d="M10.1 16.1a6 6 0 0 1 3.8 0"/>
+      <circle cx="12" cy="20" r="1" fill="currentColor"/>
+    </symbol>
+
+    <!-- Social media / Share -->
+    <symbol id="icon-social" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="18" cy="5" r="3"/>
+      <circle cx="6" cy="12" r="3"/>
+      <circle cx="18" cy="19" r="3"/>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+    </symbol>
+
+    <!-- Email -->
+    <symbol id="icon-email" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+      <polyline points="22,6 12,13 2,6"/>
+    </symbol>
+
+    <!-- QR Code (for step icons) -->
+    <symbol id="icon-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="7" height="7" rx="1"/>
+      <rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/>
+      <rect x="5" y="5" width="3" height="3" fill="currentColor" stroke="none"/>
+      <rect x="16" y="5" width="3" height="3" fill="currentColor" stroke="none"/>
+      <rect x="5" y="16" width="3" height="3" fill="currentColor" stroke="none"/>
+      <line x1="14" y1="14" x2="14" y2="14"/>
+      <line x1="17" y1="14" x2="17" y2="14"/>
+      <line x1="20" y1="14" x2="20" y2="14"/>
+      <line x1="14" y1="17" x2="14" y2="17"/>
+      <line x1="20" y1="17" x2="20" y2="17"/>
+      <line x1="14" y1="20" x2="14" y2="20"/>
+      <line x1="17" y1="20" x2="17" y2="20"/>
+      <line x1="20" y1="20" x2="20" y2="20"/>
+    </symbol>
+
+    <!-- Palette / Customise -->
+    <symbol id="icon-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+      <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+      <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+      <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+    </symbol>
+  </defs>
+</svg>
+
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="container">
+
+    <h1 class="hero__title" id="hero-heading">
+      Generate QR codes<br>in seconds. Free forever.
+    </h1>
+
+    <p class="hero__subtitle">
+      PhantomQR turns any URL, WiFi network, contact card, or message into a clean, scannable QR code — ready to download instantly.
+    </p>
+
+    <div class="hero__actions">
+      <a href="#generator" class="btn btn--primary btn--lg">Create your QR code</a>
+      <a href="#how-it-works" class="btn btn--outline btn--lg">See how it works</a>
+    </div>
+
+    <p class="hero__proof">No signup &middot; No watermark &middot; No expiry</p>
+
+    <!-- Static illustrated QR code preview -->
+    <div class="hero__illustration">
+      <div class="hero__qr-preview" aria-hidden="true">
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <!-- Finder top-left -->
+          <rect x="2" y="2" width="14" height="14" rx="1.5" fill="currentColor"/>
+          <rect x="4" y="4" width="10" height="10" rx="1" fill="var(--color-bg-card)"/>
+          <rect x="6" y="6" width="6" height="6" rx="0.5" fill="currentColor"/>
+          <!-- Finder top-right -->
+          <rect x="32" y="2" width="14" height="14" rx="1.5" fill="currentColor"/>
+          <rect x="34" y="4" width="10" height="10" rx="1" fill="var(--color-bg-card)"/>
+          <rect x="36" y="6" width="6" height="6" rx="0.5" fill="currentColor"/>
+          <!-- Finder bottom-left -->
+          <rect x="2" y="32" width="14" height="14" rx="1.5" fill="currentColor"/>
+          <rect x="4" y="34" width="10" height="10" rx="1" fill="var(--color-bg-card)"/>
+          <rect x="6" y="36" width="6" height="6" rx="0.5" fill="currentColor"/>
+          <!-- Data modules -->
+          <rect x="18" y="2" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="23" y="2" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="28" y="2" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="18" y="7" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="28" y="7" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="18" y="12" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="23" y="12" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="2" y="18" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="7" y="18" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="12" y="18" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="18" y="18" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="23" y="18" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="28" y="18" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="33" y="18" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="38" y="18" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="43" y="18" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="18" y="23" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="28" y="23" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="38" y="23" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="43" y="23" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="18" y="28" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="23" y="28" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="33" y="28" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="43" y="28" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="2" y="23" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="12" y="23" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="33" y="33" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="38" y="33" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="33" y="38" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="43" y="38" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="33" y="43" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="38" y="43" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="43" y="43" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <!-- Bottom row data -->
+          <rect x="18" y="33" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="23" y="38" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="18" y="43" width="3" height="3" rx="0.4" fill="currentColor"/>
+          <rect x="28" y="43" width="3" height="3" rx="0.4" fill="currentColor"/>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     QR CODE GENERATOR
+     ============================================================ -->
+<section class="section generator-section" id="generator" aria-labelledby="generator-heading">
+  <div class="container">
+
+    <header class="section__header">
+      <span class="section__label">Generator</span>
+      <h2 class="section__title" id="generator-heading">Create your QR code</h2>
+      <p class="section__subtitle">Choose a type, fill in the details, and download — no account needed.</p>
+    </header>
+
+    <div class="generator-box" role="region" aria-label="QR code generator">
+
+      <!-- ── Tab bar ─────────────────────────────────────── -->
+      <div class="generator-tabs" role="tablist" aria-label="QR code type">
+        <button class="generator-tab is-active" role="tab" aria-selected="true"  aria-controls="tab-url"   data-tab="url"   type="button">
+          <svg class="generator-tab__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12.586 4.586a2 2 0 0 1 2.828 2.828l-3 3a2 2 0 0 1-2.828 0M7.414 15.414a2 2 0 0 1-2.828-2.828l3-3a2 2 0 0 1 2.828 0"/></svg>
+          URL
+        </button>
+        <button class="generator-tab" role="tab" aria-selected="false" aria-controls="tab-text"  data-tab="text"  type="button">
+          <svg class="generator-tab__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h12M4 10h12M4 14h7"/></svg>
+          Text
+        </button>
+        <button class="generator-tab" role="tab" aria-selected="false" aria-controls="tab-vcard" data-tab="vcard" type="button">
+          <svg class="generator-tab__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="M7 12a3 3 0 1 1 6 0"/><circle cx="10" cy="8" r="2"/></svg>
+          vCard
+        </button>
+        <button class="generator-tab" role="tab" aria-selected="false" aria-controls="tab-email" data-tab="email" type="button">
+          <svg class="generator-tab__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="M2 7l8 5 8-5"/></svg>
+          Email
+        </button>
+        <button class="generator-tab" role="tab" aria-selected="false" aria-controls="tab-sms"   data-tab="sms"   type="button">
+          <svg class="generator-tab__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 3h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6l-4 3V4a1 1 0 0 1 1-1z"/></svg>
+          SMS
+        </button>
+        <button class="generator-tab" role="tab" aria-selected="false" aria-controls="tab-phone" data-tab="phone" type="button">
+          <svg class="generator-tab__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6.5 2h7a.5.5 0 0 1 .5.5v15a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-15A.5.5 0 0 1 6.5 2z"/><circle cx="10" cy="15.5" r="0.75" fill="currentColor" stroke="none"/></svg>
+          Phone
+        </button>
+        <button class="generator-tab" role="tab" aria-selected="false" aria-controls="tab-wifi"  data-tab="wifi"  type="button">
+          <svg class="generator-tab__icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M1.5 7.5a12 12 0 0 1 17 0M5 11a8 8 0 0 1 10 0M8.5 14.5a3 3 0 0 1 3 0"/><circle cx="10" cy="17" r="1" fill="currentColor" stroke="none"/></svg>
+          WiFi
+        </button>
+      </div>
+
+      <!-- ── Body: forms + preview ──────────────────────── -->
+      <div class="generator-body">
+
+        <!-- Forms column -->
+        <div class="generator-forms">
+
+          <!-- URL -->
+          <div class="generator-panel is-active" id="tab-url" role="tabpanel" aria-labelledby="tab-url-btn">
+            <p class="generator-panel__desc">Redirect to any website or page.</p>
+            <div class="form-field">
+              <label class="form-label" for="qr-url">Website URL</label>
+              <input class="form-input" type="url" id="qr-url" name="qr-url" placeholder="https://example.com" autocomplete="off" />
+            </div>
+          </div>
+
+          <!-- Text -->
+          <div class="generator-panel" id="tab-text" role="tabpanel" aria-labelledby="tab-text-btn" hidden>
+            <p class="generator-panel__desc">Display any plain text message when scanned.</p>
+            <div class="form-field">
+              <label class="form-label" for="qr-text">Your text</label>
+              <textarea class="form-textarea" id="qr-text" name="qr-text" placeholder="Type your message here…" rows="4"></textarea>
+            </div>
+          </div>
+
+          <!-- vCard -->
+          <div class="generator-panel" id="tab-vcard" role="tabpanel" aria-labelledby="tab-vcard-btn" hidden>
+            <p class="generator-panel__desc">Save a full contact card directly to someone's phone.</p>
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label" for="qr-vcard-first">First name</label>
+                <input class="form-input" type="text" id="qr-vcard-first" placeholder="Jane" autocomplete="off" />
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="qr-vcard-last">Last name</label>
+                <input class="form-input" type="text" id="qr-vcard-last" placeholder="Smith" autocomplete="off" />
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="qr-vcard-org">Organisation</label>
+              <input class="form-input" type="text" id="qr-vcard-org" placeholder="Acme Inc." autocomplete="off" />
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label" for="qr-vcard-phone">Phone</label>
+                <input class="form-input" type="tel" id="qr-vcard-phone" placeholder="+1 555 000 0000" autocomplete="off" />
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="qr-vcard-email">Email</label>
+                <input class="form-input" type="email" id="qr-vcard-email" placeholder="jane@example.com" autocomplete="off" />
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="qr-vcard-url">Website</label>
+              <input class="form-input" type="url" id="qr-vcard-url" placeholder="https://jane.dev" autocomplete="off" />
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="generator-panel" id="tab-email" role="tabpanel" aria-labelledby="tab-email-btn" hidden>
+            <p class="generator-panel__desc">Pre-fill an email so recipients can reach you in one scan.</p>
+            <div class="form-field">
+              <label class="form-label" for="qr-email-to">To (email address)</label>
+              <input class="form-input" type="email" id="qr-email-to" placeholder="hello@example.com" autocomplete="off" />
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="qr-email-subject">Subject</label>
+              <input class="form-input" type="text" id="qr-email-subject" placeholder="Got your card!" autocomplete="off" />
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="qr-email-body">Body</label>
+              <textarea class="form-textarea" id="qr-email-body" placeholder="Hi, I scanned your QR…" rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- SMS -->
+          <div class="generator-panel" id="tab-sms" role="tabpanel" aria-labelledby="tab-sms-btn" hidden>
+            <p class="generator-panel__desc">Pre-fill a text message so customers can reply in one tap.</p>
+            <div class="form-field">
+              <label class="form-label" for="qr-sms-phone">Phone number</label>
+              <input class="form-input" type="tel" id="qr-sms-phone" placeholder="+1 555 000 0000" autocomplete="off" />
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="qr-sms-msg">Message (optional)</label>
+              <textarea class="form-textarea" id="qr-sms-msg" placeholder="Hello, I found your listing…" rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div class="generator-panel" id="tab-phone" role="tabpanel" aria-labelledby="tab-phone-btn" hidden>
+            <p class="generator-panel__desc">Let customers call you with a single scan.</p>
+            <div class="form-field">
+              <label class="form-label" for="qr-phone">Phone number</label>
+              <input class="form-input" type="tel" id="qr-phone" placeholder="+1 555 000 0000" autocomplete="off" />
+            </div>
+          </div>
+
+          <!-- WiFi -->
+          <div class="generator-panel" id="tab-wifi" role="tabpanel" aria-labelledby="tab-wifi-btn" hidden>
+            <p class="generator-panel__desc">Let guests join your network with a single scan — no typing needed.</p>
+            <div class="form-field">
+              <label class="form-label" for="qr-wifi-ssid">Network name (SSID)</label>
+              <input class="form-input" type="text" id="qr-wifi-ssid" placeholder="MyHomeNetwork" autocomplete="off" />
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="qr-wifi-pass">Password</label>
+              <div class="input-password-wrap">
+                <input class="form-input" type="password" id="qr-wifi-pass" placeholder="••••••••" autocomplete="off" />
+                <button class="input-password-toggle" type="button" aria-label="Show password" data-target="qr-wifi-pass">
+                  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M1 10s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><circle cx="10" cy="10" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="qr-wifi-enc">Encryption</label>
+              <select class="form-input form-select" id="qr-wifi-enc">
+                <option value="WPA">WPA / WPA2 (recommended)</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">None (open network)</option>
+              </select>
+            </div>
+            <label class="form-check">
+              <input type="checkbox" id="qr-wifi-hidden" />
+              <span>Hidden network</span>
+            </label>
+          </div>
+
+        </div><!-- /generator-forms -->
+
+        <!-- Preview column -->
+        <div class="generator-preview" aria-live="polite" aria-label="QR code preview">
+          <div class="generator-preview__canvas" id="qr-canvas" aria-label="Generated QR code"></div>
+          <p class="generator-preview__empty" id="qr-empty-msg">Start typing to see your QR code</p>
+          <div class="generator-preview__actions" id="qr-actions" hidden>
+            <button class="btn btn--primary" id="btn-download-png" type="button">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3v10M6 9l4 4 4-4"/><path d="M3 15v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1"/></svg>
+              PNG
+            </button>
+            <button class="btn btn--outline" id="btn-download-svg" type="button">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3v10M6 9l4 4 4-4"/><path d="M3 15v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1"/></svg>
+              SVG
+            </button>
+          </div>
+        </div><!-- /generator-preview -->
+
+      </div><!-- /generator-body -->
+    </div><!-- /generator-box -->
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     HOW IT WORKS
+     ============================================================ -->
+<section class="section section--alt" id="how-it-works" aria-labelledby="steps-heading">
+  <div class="container">
+
+    <header class="section__header">
+      <span class="section__label">How it works</span>
+      <h2 class="section__title" id="steps-heading">Three steps to your QR code</h2>
+      <p class="section__subtitle">No account, no complexity — just pick a type, fill in the details, and download.</p>
+    </header>
+
+    <div class="steps">
+      {% set steps_data = [
+        {
+          "number": "01",
+          "title": "Choose a QR type",
+          "description": "Select from URL, WiFi, vCard, email, SMS, plain text, and more. Every type is free."
+        },
+        {
+          "number": "02",
+          "title": "Enter your content",
+          "description": "Type in your URL, WiFi credentials, contact details, or message. A live preview updates as you type."
+        },
+        {
+          "number": "03",
+          "title": "Download instantly",
+          "description": "Save your QR code as a high-resolution PNG or vector SVG — ready to print or share online."
+        }
+      ] %}
+
+      {% for step in steps_data %}
+        {% set step = step %}
+        {% include "components/step-card.html" %}
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     USE CASES
+     ============================================================ -->
+<section class="section" id="use-cases" aria-labelledby="use-cases-heading">
+  <div class="container">
+
+    <header class="section__header">
+      <span class="section__label">Use cases</span>
+      <h2 class="section__title" id="use-cases-heading">Where PhantomQR is used</h2>
+      <p class="section__subtitle">From restaurant tables to business cards — QR codes make everyday interactions faster.</p>
+    </header>
+
+    <div class="use-cases-grid">
+      {% set use_cases = [
+        {
+          "icon_id": "icon-restaurant",
+          "title": "Restaurants & Cafes",
+          "description": "Replace printed menus with a scannable QR code. Update your menu any time without reprinting."
+        },
+        {
+          "icon_id": "icon-event",
+          "title": "Events & Conferences",
+          "description": "Share event details, schedules, and venue maps in a single scan. No app download needed."
+        },
+        {
+          "icon_id": "icon-business-card",
+          "title": "Business Cards",
+          "description": "Encode your full contact details into a vCard QR. One scan saves everything to their phone."
+        },
+        {
+          "icon_id": "icon-wifi",
+          "title": "WiFi Sharing",
+          "description": "Let guests connect to your network with a single scan — no passwords to type or share verbally."
+        },
+        {
+          "icon_id": "icon-marketing",
+          "title": "Marketing & Print",
+          "description": "Add QR codes to flyers, posters, and packaging to bridge print and digital content."
+        },
+        {
+          "icon_id": "icon-social",
+          "title": "Social Media Profiles",
+          "description": "Point a QR directly at your Instagram, LinkedIn, or any profile page to grow your audience."
+        },
+        {
+          "icon_id": "icon-email",
+          "title": "Email & Contact",
+          "description": "Pre-fill an email with subject and body so customers can reach you in one tap."
+        },
+        {
+          "icon_id": "icon-download",
+          "title": "File & Link Sharing",
+          "description": "Share download links, PDFs, or any URL in physical spaces where typing isn't practical."
+        }
+      ] %}
+
+      {% for card in use_cases %}
+        {% set card = card %}
+        {% include "components/use-case-card.html" %}
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     WHY PHANTOMQR
+     ============================================================ -->
+<section class="section section--alt" id="why-phantomqr" aria-labelledby="why-heading">
+  <div class="container">
+
+    <header class="section__header">
+      <span class="section__label">Why PhantomQR</span>
+      <h2 class="section__title" id="why-heading">Built to stay out of your way</h2>
+      <p class="section__subtitle">No subscriptions, no watermarks, no accounts. Just a tool that does exactly what it says.</p>
+    </header>
+
+    <div class="why-grid">
+      {% set why_cards = [
+        {
+          "icon_id": "icon-free",
+          "title": "Completely Free",
+          "description": "Every feature, every QR type, every download — free, with no hidden tier or trial period."
+        },
+        {
+          "icon_id": "icon-no-signup",
+          "title": "No Account Required",
+          "description": "Open the page, create a QR code, download it. No registration, no email, no friction."
+        },
+        {
+          "icon_id": "icon-clean",
+          "title": "No Watermarks",
+          "description": "Your QR code is clean and professional. Nothing stamped on it. Nothing asking you to upgrade."
+        },
+        {
+          "icon_id": "icon-permanent",
+          "title": "Static Codes Never Expire",
+          "description": "Static QR codes encode data directly — they work forever, with no server to go offline."
+        },
+        {
+          "icon_id": "icon-fast",
+          "title": "Instant Generation",
+          "description": "QR codes generate as you type. No waiting, no loading spinners, no extra steps."
+        },
+        {
+          "icon_id": "icon-download",
+          "title": "PNG & SVG Download",
+          "description": "Download high-resolution PNG for screens or scalable SVG for print. Both formats are free."
+        }
+      ] %}
+
+      {% for why in why_cards %}
+        {% set why = why %}
+        {% include "components/why-card.html" %}
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FREE BANNER / CTA
+     ============================================================ -->
+<section class="free-banner" aria-labelledby="free-banner-heading">
+  <div class="container">
+    <h2 class="free-banner__title" id="free-banner-heading">Free. No catch.</h2>
+    <p class="free-banner__subtitle">
+      PhantomQR is and will always be free to use. Create as many QR codes as you need, no signup required.
+    </p>
+    <a href="#generator" class="btn btn--on-accent btn--lg">Create a QR code now</a>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FAQ
+     ============================================================ -->
+<section class="section" id="faq" aria-labelledby="faq-heading">
+  <div class="container">
+
+    <header class="section__header">
+      <span class="section__label">FAQ</span>
+      <h2 class="section__title" id="faq-heading">Frequently asked questions</h2>
+      <p class="section__subtitle">Everything you need to know about PhantomQR.</p>
+    </header>
+
+    <div class="faq-list" role="list">
+      {% set faqs = [
+        {
+          "question": "Is PhantomQR really free?",
+          "answer": "Yes, completely. There are no paid plans, no trials, and no hidden fees. Every QR type, every download, every feature is free to use without any limits."
+        },
+        {
+          "question": "Do I need to create an account?",
+          "answer": "No. You can generate and download QR codes without signing up or providing any personal information. Just open the tool and start creating."
+        },
+        {
+          "question": "Will my QR codes expire?",
+          "answer": "Static QR codes never expire. The data is encoded directly inside the QR pattern itself, so there is no server or subscription that needs to stay active. Once you download it, it works forever."
+        },
+        {
+          "question": "What types of QR codes can I create?",
+          "answer": "PhantomQR supports URL, WiFi network, vCard contact, email, SMS, plain text, and more. All types are free with no restrictions."
+        },
+        {
+          "question": "Will my QR code have a watermark?",
+          "answer": "No. PhantomQR does not add any watermark, logo, or branding to your generated QR codes. What you download is a clean, professional code."
+        },
+        {
+          "question": "What file formats can I download?",
+          "answer": "You can download your QR code as a PNG (ideal for digital use and sharing) or as an SVG (vector format, perfect for print and scaling to any size)."
+        },
+        {
+          "question": "Can I use the QR codes commercially?",
+          "answer": "Yes. QR codes you generate with PhantomQR are yours to use however you like — on products, marketing materials, menus, business cards, or anywhere else."
+        },
+        {
+          "question": "How does a QR code work?",
+          "answer": "A QR code is a two-dimensional barcode that stores data in a grid of black and white squares. Any smartphone camera can decode it instantly and open the encoded content — no dedicated app required."
+        }
+      ] %}
+
+      {% for faq in faqs %}
+        {% set faq = faq %}
+        {% include "components/faq-item.html" %}
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CONTACT
+     ============================================================ -->
+<section class="section section--alt" id="contact" aria-labelledby="contact-heading">
+  <div class="container">
+
+    <header class="section__header">
+      <span class="section__label">Contact</span>
+      <h2 class="section__title" id="contact-heading">Share your thoughts</h2>
+      <p class="section__subtitle">Have feedback, a feature request, or found a bug? We read every message.</p>
+    </header>
+
+    <div class="contact-form-wrapper">
+      <form class="form" method="POST" action="{{ url_for('contact') }}" novalidate>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" for="contact-name">
+              Name <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              class="form-input"
+              type="text"
+              id="contact-name"
+              name="name"
+              placeholder="Your name"
+              required
+              autocomplete="name"
+            />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="contact-email">
+              Email <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              class="form-input"
+              type="email"
+              id="contact-email"
+              name="email"
+              placeholder="you@example.com"
+              required
+              autocomplete="email"
+            />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="contact-subject">Subject</label>
+          <input
+            class="form-input"
+            type="text"
+            id="contact-subject"
+            name="subject"
+            placeholder="What is this about?"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="contact-message">
+            Message <span class="required" aria-hidden="true">*</span>
+          </label>
+          <textarea
+            class="form-textarea"
+            id="contact-message"
+            name="message"
+            placeholder="Your feedback, question, or feature request..."
+            required
+            rows="5"
+          ></textarea>
+        </div>
+
+        <div class="form-submit">
+          <button type="submit" class="btn btn--primary btn--lg">Send message</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

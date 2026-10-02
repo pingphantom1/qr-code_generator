@@ -1,0 +1,15 @@
+{% extends "errors/error.html" %}
+
+{% block title %}500 — Server Error · PhantomQR{% endblock %}
+
+{% block error_icon %}
+  <!-- Broken QR / X mark -->
+  <g transform="translate(48,56)" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="-8" y1="-8" x2="8" y2="8"/>
+    <line x1="8"  y1="-8" x2="-8" y2="8"/>
+  </g>
+{% endblock %}
+
+{% block error_code %}500{% endblock %}
+{% block error_title %}Something Went Wrong{% endblock %}
+{% block error_message %}An unexpected error occurred on our end. It has been noted. Please try again in a moment, or go back to the home page.{% endblock %}

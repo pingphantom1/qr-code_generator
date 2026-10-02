@@ -1,0 +1,13 @@
+{#
+  step-card.html — Reusable step card for "How it works"
+  Usage:
+    {% set step = { "number": "01", "title": "...", "description": "..." } %}
+    {% include "components/step-card.html" %}
+#}
+<div class="step-card">
+  <div class="step-card__number" aria-hidden="true">{{ step.number }}</div>
+  <div class="step-card__body">
+    <h3 class="step-card__title">{{ step.title }}</h3>
+    <p class="step-card__desc">{{ step.description }}</p>
+  </div>
+</div>

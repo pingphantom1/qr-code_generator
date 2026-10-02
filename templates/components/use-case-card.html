@@ -1,0 +1,17 @@
+{#
+  use-case-card.html — Reusable use case card
+  Usage:
+    {% set card = { "icon_id": "icon-restaurant", "title": "Restaurants", "description": "..." } %}
+    {% include "components/use-case-card.html" %}
+#}
+<article class="use-case-card">
+  <div class="use-case-card__icon" aria-hidden="true">
+    <svg class="use-case-card__svg">
+      <use href="#{{ card.icon_id }}" />
+    </svg>
+  </div>
+  <div class="use-case-card__body">
+    <h3 class="use-case-card__title">{{ card.title }}</h3>
+    <p class="use-case-card__desc">{{ card.description }}</p>
+  </div>
+</article>

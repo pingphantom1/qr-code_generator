@@ -1,0 +1,1331 @@
+/* ============================================================
+   PhantomQR — Main Stylesheet
+   Design principles:
+   - Single accent color (no rainbow gradients)
+   - Disciplined type scale (Inter)
+   - Generous whitespace
+   - Accessible contrast in both themes
+   - No glow effects, no blobs, no vibecoded decorations
+   ============================================================ */
+
+/* ─── 1. CSS Custom Properties ──────────────────────────────── */
+:root {
+  /* Color palette — light mode */
+  --color-bg:           #ffffff;
+  --color-bg-subtle:    #f5f5f7;
+  --color-bg-card:      #ffffff;
+  --color-border:       #e4e4e7;
+  --color-border-subtle: #f0f0f2;
+
+  --color-text:         #111112;
+  --color-text-muted:   #6b6b78;
+  --color-text-faint:   #a1a1aa;
+
+  /* Single accent — a calm, professional indigo */
+  --color-accent:       #4a6cf7;
+  --color-accent-dark:  #3558e8;
+  --color-accent-light: #eef1fe;
+  --color-accent-text:  #ffffff;
+
+  /* Semantic */
+  --color-success:      #16a34a;
+  --color-error:        #dc2626;
+
+  /* Typography */
+  --font-sans:          'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-size-xs:       0.75rem;   /* 12px */
+  --font-size-sm:       0.875rem;  /* 14px */
+  --font-size-base:     1rem;      /* 16px */
+  --font-size-lg:       1.125rem;  /* 18px */
+  --font-size-xl:       1.25rem;   /* 20px */
+  --font-size-2xl:      1.5rem;    /* 24px */
+  --font-size-3xl:      1.875rem;  /* 30px */
+  --font-size-4xl:      2.25rem;   /* 36px */
+  --font-size-5xl:      3rem;      /* 48px */
+
+  --font-weight-regular: 400;
+  --font-weight-medium:  500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:    700;
+
+  --line-height-tight:  1.2;
+  --line-height-snug:   1.4;
+  --line-height-normal: 1.6;
+  --line-height-relaxed: 1.75;
+
+  --letter-spacing-tight: -0.03em;
+  --letter-spacing-normal: -0.01em;
+
+  /* Spacing scale */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* Layout */
+  --container-max:  1160px;
+  --container-pad:  clamp(1rem, 4vw, 2rem);
+
+  /* Radius */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  /* Shadows — flat, no colored glow */
+  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-sm:  0 1px 4px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg:  0 8px 24px rgba(0, 0, 0, 0.10), 0 4px 8px rgba(0, 0, 0, 0.04);
+
+  /* Transitions */
+  --transition-fast:   120ms ease;
+  --transition-normal: 220ms ease;
+  --transition-slow:   350ms ease;
+
+  /* Navbar */
+  --navbar-height: 64px;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] {
+  --color-bg:           #0e0e10;
+  --color-bg-subtle:    #18181b;
+  --color-bg-card:      #1c1c1f;
+  --color-border:       #2a2a2f;
+  --color-border-subtle: #222226;
+
+  --color-text:         #f4f4f5;
+  --color-text-muted:   #a1a1aa;
+  --color-text-faint:   #52525b;
+
+  --color-accent:       #6381f8;
+  --color-accent-dark:  #7a95f9;
+  --color-accent-light: #1e2448;
+
+  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.40);
+  --shadow-sm:  0 1px 4px rgba(0, 0, 0, 0.40), 0 1px 2px rgba(0, 0, 0, 0.20);
+  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.40), 0 2px 4px rgba(0, 0, 0, 0.20);
+  --shadow-lg:  0 8px 24px rgba(0, 0, 0, 0.50), 0 4px 8px rgba(0, 0, 0, 0.20);
+}
+
+
+/* ─── 2. Reset & Box Model ───────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-text);
+}
+
+p {
+  line-height: var(--line-height-relaxed);
+}
+
+
+/* ─── 3. Layout Utilities ────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+.section {
+  padding-block: var(--space-20);
+}
+
+.section--alt {
+  background-color: var(--color-bg-subtle);
+}
+
+.section__header {
+  text-align: center;
+  max-width: 600px;
+  margin-inline: auto;
+  margin-bottom: var(--space-12);
+}
+
+.section__label {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.section__title {
+  font-size: clamp(var(--font-size-2xl), 4vw, var(--font-size-4xl));
+  margin-bottom: var(--space-4);
+}
+
+.section__subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Visually hidden (accessibility) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* ─── 4. Buttons ─────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.625rem 1.25rem;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  text-decoration: none;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Primary */
+.btn--primary {
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+  border-color: var(--color-accent);
+}
+
+.btn--primary:hover {
+  background-color: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
+}
+
+/* Outlined */
+.btn--outline {
+  background-color: transparent;
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.btn--outline:hover {
+  background-color: var(--color-accent-light);
+}
+
+/* Large modifier */
+.btn--lg {
+  padding: 0.875rem 1.75rem;
+  font-size: var(--font-size-base);
+  border-radius: var(--radius-lg);
+}
+
+
+/* ─── 5. Navbar ──────────────────────────────────────────────── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--navbar-height);
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+}
+
+/* Subtle backdrop on scroll */
+.navbar.is-scrolled {
+  background-color: color-mix(in srgb, var(--color-bg) 92%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: var(--space-8);
+}
+
+.navbar__logo-img {
+  height: 32px;
+  width: auto;
+  color: var(--color-text);
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-right: auto;
+}
+
+.navbar__link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.navbar__link:hover {
+  color: var(--color-text);
+}
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  border: 1.5px solid var(--color-border);
+  transition: color var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  color: var(--color-text);
+  background-color: var(--color-bg-subtle);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Show/hide sun vs moon based on theme */
+[data-theme="light"] .theme-toggle__icon--sun { display: none; }
+[data-theme="dark"]  .theme-toggle__icon--moon { display: none; }
+
+/* Hamburger */
+.navbar__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+}
+
+.navbar__hamburger-bar {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background-color: currentColor;
+  border-radius: var(--radius-full);
+  transition: transform var(--transition-normal), opacity var(--transition-normal);
+}
+
+/* Mobile nav */
+.navbar__mobile {
+  position: absolute;
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-4) var(--container-pad) var(--space-6);
+}
+
+.navbar__mobile[hidden] {
+  display: none;
+}
+
+.navbar__mobile-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.navbar__mobile-link {
+  display: block;
+  padding: var(--space-3) 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border-subtle);
+  transition: color var(--transition-fast);
+}
+
+.navbar__mobile-link:last-of-type {
+  border-bottom: none;
+}
+
+.navbar__mobile-link:hover {
+  color: var(--color-text);
+}
+
+.navbar__mobile-cta {
+  margin-top: var(--space-4);
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .navbar__links { display: none; }
+  .navbar__cta   { display: none; }
+  .navbar__hamburger { display: flex; }
+}
+
+
+/* ─── 6. Hero Section ────────────────────────────────────────── */
+.hero {
+  padding-block: clamp(var(--space-16), 10vw, var(--space-24));
+  text-align: center;
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  background-color: var(--color-accent-light);
+  border-radius: var(--radius-full);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+  margin-bottom: var(--space-6);
+}
+
+.hero__title {
+  font-size: clamp(var(--font-size-3xl), 6vw, var(--font-size-5xl));
+  letter-spacing: var(--letter-spacing-tight);
+  max-width: 800px;
+  margin-inline: auto;
+  margin-bottom: var(--space-5);
+}
+
+.hero__subtitle {
+  font-size: clamp(var(--font-size-base), 2vw, var(--font-size-xl));
+  color: var(--color-text-muted);
+  max-width: 560px;
+  margin-inline: auto;
+  margin-bottom: var(--space-8);
+}
+
+.hero__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.hero__proof {
+  margin-top: var(--space-10);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-faint);
+}
+
+/* QR code illustration in hero */
+.hero__illustration {
+  margin-top: var(--space-16);
+  display: flex;
+  justify-content: center;
+}
+
+.hero__qr-preview {
+  width: 200px;
+  height: 200px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-card);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.hero__qr-preview svg {
+  width: 100%;
+  height: 100%;
+  color: var(--color-text);
+}
+
+
+/* ─── 7. How It Works ────────────────────────────────────────── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-8);
+  position: relative;
+}
+
+/* Connecting line between steps */
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: calc(var(--space-8) + 28px);
+  right: calc(var(--space-8) + 28px);
+  height: 1px;
+  background-color: var(--color-border);
+  z-index: 0;
+}
+
+.step-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.step-card__number {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+
+.step-card__title {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-2);
+}
+
+.step-card__desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+@media (max-width: 640px) {
+  .steps::before { display: none; }
+}
+
+
+/* ─── 8. Use Cases ───────────────────────────────────────────── */
+.use-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-5);
+}
+
+.use-case-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.use-case-card:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  box-shadow: var(--shadow-md);
+}
+
+.use-case-card__icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  background-color: var(--color-accent-light);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.use-case-card__svg {
+  width: 22px;
+  height: 22px;
+  color: var(--color-accent);
+}
+
+.use-case-card__title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-1);
+}
+
+.use-case-card__desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+
+/* ─── 9. Why PhantomQR ───────────────────────────────────────── */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-5);
+}
+
+.why-card {
+  padding: var(--space-6);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.why-card:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  box-shadow: var(--shadow-sm);
+}
+
+.why-card__icon {
+  width: 44px;
+  height: 44px;
+  background-color: var(--color-accent-light);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-4);
+}
+
+.why-card__svg {
+  width: 22px;
+  height: 22px;
+  color: var(--color-accent);
+}
+
+.why-card__title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.why-card__desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+
+/* ─── 10. FAQ ────────────────────────────────────────────────── */
+.faq-list {
+  max-width: 720px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.faq-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+  background-color: var(--color-bg-card);
+}
+
+.faq-item.is-open {
+  border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+}
+
+.faq-item__question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  text-align: left;
+  background: none;
+  transition: background-color var(--transition-fast);
+}
+
+.faq-item__question:hover {
+  background-color: var(--color-bg-subtle);
+}
+
+.faq-item__question:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.faq-item__chevron {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  transition: transform var(--transition-normal);
+}
+
+.faq-item.is-open .faq-item__chevron {
+  transform: rotate(180deg);
+}
+
+.faq-item__answer {
+  padding: 0 var(--space-6) var(--space-5);
+}
+
+.faq-item__answer[hidden] {
+  display: none;
+}
+
+.faq-item__answer p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+
+/* ─── 11. Contact Form ───────────────────────────────────────── */
+.contact-form-wrapper {
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.form-label .required {
+  color: var(--color-error);
+  margin-left: 2px;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--color-text-faint);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 480px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+.form-submit {
+  display: flex;
+  justify-content: flex-start;
+}
+
+
+/* ─── 12. Free Banner ────────────────────────────────────────── */
+.free-banner {
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+  padding-block: var(--space-16);
+  text-align: center;
+}
+
+.free-banner__title {
+  font-size: clamp(var(--font-size-2xl), 4vw, var(--font-size-4xl));
+  color: inherit;
+  margin-bottom: var(--space-4);
+}
+
+.free-banner__subtitle {
+  font-size: var(--font-size-lg);
+  opacity: 0.85;
+  max-width: 480px;
+  margin-inline: auto;
+  margin-bottom: var(--space-8);
+  line-height: var(--line-height-relaxed);
+}
+
+.btn--on-accent {
+  background-color: #ffffff;
+  color: var(--color-accent);
+  border-color: #ffffff;
+}
+
+.btn--on-accent:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+
+/* ─── 13. Footer ─────────────────────────────────────────────── */
+.footer {
+  background-color: var(--color-bg-subtle);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-16);
+}
+
+.footer__inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-12);
+  align-items: start;
+  padding-bottom: var(--space-12);
+}
+
+.footer__logo {
+  height: 28px;
+  width: auto;
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+}
+
+.footer__tagline {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  max-width: 280px;
+  line-height: var(--line-height-relaxed);
+}
+
+.footer__nav {
+  display: flex;
+  gap: var(--space-12);
+}
+
+.footer__col-heading {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: var(--space-4);
+}
+
+.footer__col-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.footer__link {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.footer__link:hover {
+  color: var(--color-text);
+}
+
+.footer__bottom {
+  border-top: 1px solid var(--color-border);
+  padding-block: var(--space-5);
+}
+
+.footer__bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.footer__copy,
+.footer__note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-faint);
+}
+
+@media (max-width: 640px) {
+  .footer__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+  .footer__nav {
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+  .footer__bottom-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+
+/* ─── 14. Divider ────────────────────────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+
+/* ─── 15. Inline SVG sprite (hidden) ─────────────────────────── */
+.svg-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+
+/* ─── 16. Logo dark-mode inversion ───────────────────────────── */
+/*
+  The logo SVG uses hardcoded black fills with white cutouts.
+  In dark mode we invert it so it renders as white-on-dark correctly.
+  filter: invert(1) flips black→white and white→black, which is exactly
+  what we need for a monochrome logo on a dark background.
+*/
+[data-theme="dark"] .navbar__logo-img,
+[data-theme="dark"] .footer__logo {
+  filter: invert(1);
+}
+
+
+/* ─── 17. Error pages ────────────────────────────────────────── */
+.error-page {
+  min-height: calc(100dvh - var(--navbar-height) - 120px);
+  display: flex;
+  align-items: center;
+  padding-block: var(--space-20);
+}
+
+.error-page__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+}
+
+.error-page__illustration {
+  margin-bottom: var(--space-4);
+}
+
+.error-page__qr {
+  width: 120px;
+  height: 120px;
+  color: var(--color-text);
+}
+
+.error-page__code {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.error-page__title {
+  font-size: clamp(var(--font-size-2xl), 4vw, var(--font-size-4xl));
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: var(--space-2);
+}
+
+.error-page__message {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  max-width: 480px;
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.error-page__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+/* ─── 18. QR Code Generator Box ─────────────────────────────── */
+
+/* Section override — remove default top padding so it flows nicely */
+.generator-section {
+  padding-top: var(--space-16);
+}
+
+/* Outer card */
+.generator-box {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+/* ── Tab bar ──────────────────────────────────────────────────── */
+.generator-tabs {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;           /* Firefox */
+  -ms-overflow-style: none;        /* IE/Edge */
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg-subtle);
+  gap: 0;
+  padding: 0;
+}
+
+.generator-tabs::-webkit-scrollbar { display: none; }
+
+.generator-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: none;
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+  position: relative;
+  bottom: -1px; /* overlap the border-bottom of the tab bar */
+}
+
+.generator-tab:hover {
+  color: var(--color-text);
+  background-color: color-mix(in srgb, var(--color-accent) 6%, transparent);
+}
+
+.generator-tab.is-active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+  background-color: var(--color-bg-card);
+}
+
+.generator-tab:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.generator-tab__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Body ─────────────────────────────────────────────────────── */
+.generator-body {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 0;
+  min-height: 360px;
+}
+
+/* ── Forms column ─────────────────────────────────────────────── */
+.generator-forms {
+  padding: var(--space-8);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.generator-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  flex: 1;
+}
+
+.generator-panel[hidden] {
+  display: none;
+}
+
+.generator-panel__desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-1);
+}
+
+/* Password input wrapper */
+.input-password-wrap {
+  position: relative;
+}
+
+.input-password-wrap .form-input {
+  padding-right: 2.75rem;
+}
+
+.input-password-toggle {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  color: var(--color-text-muted);
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast);
+  cursor: pointer;
+}
+
+.input-password-toggle:hover { color: var(--color-text); }
+
+.input-password-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Form select */
+.form-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%236b6b78' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.875rem center;
+  padding-right: 2.5rem;
+}
+
+/* Checkbox row */
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.form-check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Preview column ───────────────────────────────────────────── */
+.generator-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  padding: var(--space-8) var(--space-6);
+  background-color: var(--color-bg-subtle);
+}
+
+/* The div qrcode.js renders into */
+.generator-preview__canvas {
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* qrcode.js injects a <canvas> or <img> — make sure it fills the slot */
+.generator-preview__canvas canvas,
+.generator-preview__canvas img {
+  width: 160px !important;
+  height: 160px !important;
+  border-radius: var(--radius-md);
+  display: block;
+}
+
+.generator-preview__empty {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-faint);
+  text-align: center;
+  line-height: var(--line-height-relaxed);
+  max-width: 160px;
+}
+
+.generator-preview__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.generator-preview__actions[hidden] {
+  display: none;
+}
+
+.generator-preview__actions .btn {
+  width: 100%;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.generator-preview__actions .btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Dark-mode adjustments for the QR canvas background */
+[data-theme="dark"] .generator-preview__canvas canvas,
+[data-theme="dark"] .generator-preview__canvas img {
+  /* qrcode.js always renders white bg — add subtle border so it stands out */
+  outline: 1px solid var(--color-border);
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 680px) {
+  .generator-body {
+    grid-template-columns: 1fr;
+  }
+
+  .generator-forms {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .generator-preview {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: var(--space-6);
+    gap: var(--space-4);
+  }
+
+  .generator-preview__actions {
+    flex-direction: row;
+    width: auto;
+  }
+
+  .generator-preview__actions .btn {
+    width: auto;
+  }
+}
+
+/* ── QR loading spinner ───────────────────────────────────────── */
+.qr-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: qr-spin 0.7s linear infinite;
+}
+
+@keyframes qr-spin {
+  to { transform: rotate(360deg); }
+}

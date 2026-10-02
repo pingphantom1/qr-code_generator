@@ -1,0 +1,16 @@
+{% extends "errors/error.html" %}
+
+{% block title %}400 — Bad Request · PhantomQR{% endblock %}
+
+{% block error_icon %}
+  <!-- Warning triangle -->
+  <g transform="translate(48,56)" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0 -13 L11 8 L-11 8 Z" transform="translate(0,-2)"/>
+    <line x1="0" y1="-7" x2="0" y2="-1"/>
+    <circle cx="0" cy="3" r="1.2" fill="var(--color-accent)" stroke="none"/>
+  </g>
+{% endblock %}
+
+{% block error_code %}400{% endblock %}
+{% block error_title %}Bad Request{% endblock %}
+{% block error_message %}The server could not understand the request. This usually means something was malformed or missing in what was sent. Try again, or head back home.{% endblock %}

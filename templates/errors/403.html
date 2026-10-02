@@ -1,0 +1,16 @@
+{% extends "errors/error.html" %}
+
+{% block title %}403 — Forbidden · PhantomQR{% endblock %}
+
+{% block error_icon %}
+  <!-- Lock -->
+  <g transform="translate(48,56)" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="-8" y="-4" width="16" height="13" rx="2"/>
+    <path d="M-5 -4 V-7 a5 5 0 0 1 10 0 V-4"/>
+    <circle cx="0" cy="3" r="1.5" fill="var(--color-accent)" stroke="none"/>
+  </g>
+{% endblock %}
+
+{% block error_code %}403{% endblock %}
+{% block error_title %}Access Denied{% endblock %}
+{% block error_message %}You do not have permission to access this page. If you believe this is a mistake, check the URL or return home.{% endblock %}

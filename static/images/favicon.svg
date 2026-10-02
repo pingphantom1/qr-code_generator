@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+  <!-- Top-left finder pattern -->
+  <rect x="2" y="2" width="18" height="18" rx="2" fill="#111112"/>
+  <rect x="5" y="5" width="12" height="12" rx="1" fill="#ffffff"/>
+  <rect x="8" y="8" width="6" height="6" rx="0.5" fill="#111112"/>
+
+  <!-- Top-right finder pattern -->
+  <rect x="28" y="2" width="18" height="18" rx="2" fill="#111112"/>
+  <rect x="31" y="5" width="12" height="12" rx="1" fill="#ffffff"/>
+  <rect x="34" y="8" width="6" height="6" rx="0.5" fill="#111112"/>
+
+  <!-- Bottom-left finder pattern -->
+  <rect x="2" y="28" width="18" height="18" rx="2" fill="#111112"/>
+  <rect x="5" y="31" width="12" height="12" rx="1" fill="#ffffff"/>
+  <rect x="8" y="34" width="6" height="6" rx="0.5" fill="#111112"/>
+
+  <!-- Data modules -->
+  <rect x="22" y="22" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="27" y="22" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="22" y="27" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="32" y="22" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="37" y="22" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="42" y="22" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="32" y="27" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="42" y="27" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="27" y="32" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="37" y="32" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="22" y="37" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="32" y="37" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="42" y="37" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="27" y="42" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="37" y="42" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="42" y="42" width="3" height="3" rx="0.4" fill="#111112"/>
+
+  <!-- Timing dots -->
+  <rect x="22" y="8"  width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="22" y="14" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="8"  y="22" width="3" height="3" rx="0.4" fill="#111112"/>
+  <rect x="14" y="22" width="3" height="3" rx="0.4" fill="#111112"/>
+</svg>
