@@ -34,6 +34,7 @@ htmlcov/
 
 # Logs
 *.log
+contact_submissions.log
 
 # Database
 *.db

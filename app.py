@@ -1,8 +1,10 @@
 import os
+import logging
 import qrcode
 import qrcode.image.svg
 import io
 import base64
+from datetime import datetime, timezone
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, Response
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -19,6 +21,16 @@ limiter = Limiter(
     default_limits=[],          # no global limit; apply per-route only
     storage_uri="memory://",    # in-process store; swap for Redis in production
 )
+
+# ── Contact form logger ───────────────────────────────────────────────────────
+_contact_logger = logging.getLogger("contact")
+_contact_logger.setLevel(logging.INFO)
+_contact_logger.propagate = False
+
+_contact_log_path = os.environ.get("CONTACT_LOG", "contact_submissions.log")
+_fh = logging.FileHandler(_contact_log_path, encoding="utf-8")
+_fh.setFormatter(logging.Formatter("%(message)s"))
+_contact_logger.addHandler(_fh)
 
 
 # ── Error handlers ────────────────────────────────────────────────────────────
@@ -137,8 +149,25 @@ def contact():
         flash("Please fill in all required fields.", "error")
         return redirect(url_for("landing") + "#contact")
 
-    # TODO: send email or store submission
-    flash("Thanks for your message! We will get back to you soon.", "success")
+    # Append submission to the contact log file.
+    # The log path is controlled by the CONTACT_LOG env var (default:
+    # contact_submissions.log beside app.py).
+    ts = datetime.now(timezone.utc).isoformat()
+    entry = (
+        f"---\n"
+        f"timestamp: {ts}\n"
+        f"name:      {name}\n"
+        f"email:     {email}\n"
+        f"subject:   {subject or '(none)'}\n"
+        f"message:\n{message}\n"
+    )
+    try:
+        _contact_logger.info(entry)
+    except Exception:
+        # Log write failure should not break the user-facing response.
+        app.logger.exception("Failed to write contact submission to log")
+
+    flash("Thanks for your message! We'll read it and get back to you if needed.", "success")
     return redirect(url_for("landing") + "#contact")
 
 
