@@ -1,11 +1,15 @@
+import os
 import qrcode
 import qrcode.image.svg
 import io
 import base64
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, Response
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = "change-this-before-deploying"
+app.secret_key = os.environ["SECRET_KEY"]
 
 
 # ── Error handlers ────────────────────────────────────────────────────────────
