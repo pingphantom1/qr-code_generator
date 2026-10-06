@@ -237,6 +237,12 @@
     var actionsDiv = document.getElementById('qr-actions');
     var btnPng     = document.getElementById('btn-download-png');
     var btnSvg     = document.getElementById('btn-download-svg');
+    var btnCopy    = document.getElementById('btn-copy-png');
+
+    // Hide the Copy button if the Clipboard API is not available (non-HTTPS, old browsers)
+    if (!navigator.clipboard || !window.ClipboardItem) {
+      if (btnCopy) btnCopy.hidden = true;
+    }
 
     var activeTab   = 'url';
     var currentPng  = null;   // latest PNG data URI from server
@@ -348,6 +354,40 @@
       link.download = 'phantomqr.png';
       link.click();
     });
+
+    /* ── Copy to clipboard ────────────────────────────────── */
+    if (btnCopy) {
+      btnCopy.addEventListener('click', function () {
+        if (!currentPng || !navigator.clipboard || !window.ClipboardItem) return;
+
+        // Convert the base64 data URI to a Blob and write it to the clipboard
+        var originalLabel = btnCopy.innerHTML;
+        btnCopy.disabled = true;
+
+        fetch(currentPng)
+          .then(function (res) { return res.blob(); })
+          .then(function (blob) {
+            return navigator.clipboard.write([
+              new ClipboardItem({ 'image/png': blob }),
+            ]);
+          })
+          .then(function () {
+            btnCopy.innerHTML = '✓ Copied!';
+            setTimeout(function () {
+              btnCopy.innerHTML = originalLabel;
+              btnCopy.disabled = false;
+            }, 2000);
+          })
+          .catch(function (err) {
+            console.error('Copy to clipboard failed:', err);
+            btnCopy.innerHTML = 'Copy failed';
+            setTimeout(function () {
+              btnCopy.innerHTML = originalLabel;
+              btnCopy.disabled = false;
+            }, 2000);
+          });
+      });
+    }
 
     /* ── SVG download ─────────────────────────────────────── */
     btnSvg.addEventListener('click', function () {
