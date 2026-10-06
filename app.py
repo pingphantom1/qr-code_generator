@@ -4,12 +4,21 @@ import qrcode.image.svg
 import io
 import base64
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, Response
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ["SECRET_KEY"]
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=[],          # no global limit; apply per-route only
+    storage_uri="memory://",    # in-process store; swap for Redis in production
+)
 
 
 # ── Error handlers ────────────────────────────────────────────────────────────
@@ -24,6 +33,10 @@ def forbidden(e):
 @app.errorhandler(404)
 def not_found(e):
     return render_template("errors/404.html"), 404
+
+@app.errorhandler(429)
+def too_many_requests(e):
+    return jsonify({"error": "Too many requests — please slow down."}), 429
 
 @app.errorhandler(500)
 def server_error(e):
@@ -73,6 +86,7 @@ def _make_qr(data: str):
 
 
 @app.route("/api/qr", methods=["POST"])
+@limiter.limit("60 per minute; 5 per second")
 def api_qr_png():
     """Generate a QR code PNG and return it as a base64 data URI."""
     raw = (request.json or {}).get("data", "").strip()
@@ -92,6 +106,7 @@ def api_qr_png():
 
 
 @app.route("/api/qr/svg", methods=["POST"])
+@limiter.limit("60 per minute; 5 per second")
 def api_qr_svg():
     """Generate a QR code SVG and return it as plain SVG text."""
     raw = (request.json or {}).get("data", "").strip()
