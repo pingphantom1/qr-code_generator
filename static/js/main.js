@@ -354,12 +354,21 @@
       var payload = buildPayload(activeTab);
       if (!payload) return;
 
+      // Show loading state on the button
+      var originalLabel = btnSvg.innerHTML;
+      btnSvg.disabled = true;
+      btnSvg.innerHTML = '<span aria-hidden="true">…</span> Generating…';
+      btnSvg.setAttribute('aria-busy', 'true');
+
       fetch('/api/qr/svg', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ data: payload }),
       })
-        .then(function (res) { return res.text(); })
+        .then(function (res) {
+          if (!res.ok) throw new Error('Server returned ' + res.status);
+          return res.text();
+        })
         .then(function (svgText) {
           var blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
           var url  = URL.createObjectURL(blob);
@@ -371,6 +380,22 @@
         })
         .catch(function (err) {
           console.error('SVG download error:', err);
+          // Surface a brief error message below the actions bar
+          var errEl = document.getElementById('qr-svg-error');
+          if (!errEl) {
+            errEl = document.createElement('p');
+            errEl.id        = 'qr-svg-error';
+            errEl.className = 'generator-preview__error';
+            actionsDiv.insertAdjacentElement('afterend', errEl);
+          }
+          errEl.textContent = 'SVG download failed — please try again.';
+          errEl.hidden = false;
+          setTimeout(function () { if (errEl) errEl.hidden = true; }, 4000);
+        })
+        .finally(function () {
+          btnSvg.disabled = false;
+          btnSvg.innerHTML = originalLabel;
+          btnSvg.removeAttribute('aria-busy');
         });
     });
 

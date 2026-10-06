@@ -1257,6 +1257,13 @@ p {
   max-width: 160px;
 }
 
+.generator-preview__error {
+  font-size: var(--font-size-sm);
+  color: var(--color-error, #e53e3e);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
 .generator-preview__actions {
   display: flex;
   flex-direction: column;
