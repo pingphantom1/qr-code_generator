@@ -142,8 +142,9 @@
   }
 
   function escapeWifi(str) {
-    // Escape backslash, semicolon, comma, quote, colon per WIFI spec
-    return str.replace(/([\\;,":"])/g, '\\$1');
+    // Escape backslash, semicolon, comma, and double-quote per the WiFi QR spec.
+    // (Colon is a field separator but does NOT need escaping inside values.)
+    return str.replace(/([\\;,"])/g, '\\$1');
   }
 
   function buildPayload(tab) {
