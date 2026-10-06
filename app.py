@@ -45,6 +45,21 @@ def generate():
 
 
 # ── QR code API ───────────────────────────────────────────────────────────────
+MAX_QR_DATA_LEN = 2048  # characters; well above practical QR capacity (~4296 bytes)
+
+
+def _validate_qr_data(data: str):
+    """Return (data, error_response) — error_response is None when input is valid."""
+    if not data:
+        return None, (jsonify({"error": "No data provided"}), 400)
+    if len(data) > MAX_QR_DATA_LEN:
+        return None, (
+            jsonify({"error": f"Data too long (max {MAX_QR_DATA_LEN} characters)"}),
+            400,
+        )
+    return data, None
+
+
 def _make_qr(data: str):
     """Return a configured QRCode object for the given data string."""
     qr = qrcode.QRCode(
@@ -60,9 +75,10 @@ def _make_qr(data: str):
 @app.route("/api/qr", methods=["POST"])
 def api_qr_png():
     """Generate a QR code PNG and return it as a base64 data URI."""
-    data = (request.json or {}).get("data", "").strip()
-    if not data:
-        return jsonify({"error": "No data provided"}), 400
+    raw = (request.json or {}).get("data", "").strip()
+    data, err = _validate_qr_data(raw)
+    if err:
+        return err
 
     try:
         qr  = _make_qr(data)
@@ -78,9 +94,10 @@ def api_qr_png():
 @app.route("/api/qr/svg", methods=["POST"])
 def api_qr_svg():
     """Generate a QR code SVG and return it as plain SVG text."""
-    data = (request.json or {}).get("data", "").strip()
-    if not data:
-        return jsonify({"error": "No data provided"}), 400
+    raw = (request.json or {}).get("data", "").strip()
+    data, err = _validate_qr_data(raw)
+    if err:
+        return err
 
     try:
         qr  = _make_qr(data)
