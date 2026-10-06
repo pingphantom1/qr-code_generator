@@ -154,6 +154,8 @@
         var url = val('qr-url').trim();
         if (!url) return '';
         if (!/^[a-z]+:\/\//i.test(url)) url = 'https://' + url;
+        // Validate the resulting URL with the URL constructor before sending
+        try { new URL(url); } catch (_) { return ''; }
         return url;
       }
 
